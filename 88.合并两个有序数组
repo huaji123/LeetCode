@@ -1,0 +1,71 @@
+题目描述：给定两个按非递减顺序排列的整数数组nums1和nums2，另有两个整数m和n，分别表示nums1和nums2中的元素数目，请合并nums2到nums1中，使合并后的数组同样按非递减顺序排列
+注：合并后的数组不应该由函数返回，而是存储在nums1中。为了应对这种情况，nums1的初始长度为m+n，其中前m个元素表示应合并的元素，后n个元素为0，应忽略。nums2的长度为n。
+
+解法一：直接合并后排序
+
+复杂度分析：时间复杂度O((m+n)log(m+n)),空间复杂度O(log(m+n))
+
+代码：
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        for (int i = 0; i != n; ++i) {
+            nums1[m + i] = nums2[i];
+        }
+        Arrays.sort(nums1);
+    }
+}
+
+解法二：双指针。利用两个数组有序的性质，使用双指针，将两个数组看成队列，每次都从两个数组头部取出比较小的数字放到结果中
+
+复杂度分析：时间复杂度O(m+n),空间复杂度O(m+n)
+
+代码：
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int p1 = 0, p2 = 0;
+        int[] sorted = new int[m + n];
+        int cur;
+        while (p1 < m || p2 < n) {
+            if (p1 == m) { //nums1结束，把nums2剩下全部元素存进sorted[]
+                cur = nums2[p2++];
+            } else if (p2 == n) { //nums2结束，把nums1剩下全部元素存进sorted[]
+                cur = nums1[p1++];
+            } else if (nums1[p1] < nums2[p2]) {
+                cur = nums1[p1++];
+            } else {
+                cur = nums2[p2++];
+            }
+            sorted[p1 + p2 - 1] = cur;
+        }
+        for (int i = 0; i != m + n; ++i) {
+            nums1[i] = sorted[i];
+        }
+    }
+}
+
+解法三：逆向双指针，为了节省解法二的空间复杂度，且避免nums1中的数据被覆盖。观察可知，nums1的后半部分是空的，可以直接覆盖而不会影响结果。因此可以指针设置从后向前遍历，每次取两者之中较大者放进nums1的后半步。
+       严格来说，在此遍历过程中的任意一个时刻，nums1数组中都有m-p1-1个元素被放入nums1的后半部，nums2数组中有n-p2-1个元素被放入nums1后半部，而在指针p1后面，nums1数组有m+n-p1-1个位置。
+       由于 m + n - p1 - 1 ≥ m - p1 -1 + n - p2 -1 等价于 p2 ≥ -1 永远成立，因此p1后面的位置永远足够容纳被插入的元素，不会产生p1的元素被覆盖的情况
+
+复杂度分析：时间复杂度O(m+n),空间复杂度O(1)
+
+代码：
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int p1 = m - 1, p2 = n - 1;
+        int tail = m + n - 1;
+        int cur;
+        while (p1 >= 0 || p2 >= 0) {
+            if (p1 == -1) {
+                cur = nums2[p2--];
+            } else if (p2 == -1) {
+                cur = nums1[p1--];
+            } else if (nums1[p1] > nums2[p2]) {
+                cur = nums1[p1--];
+            } else {
+                cur = nums2[p2--];
+            }
+            nums1[tail--] = cur;
+        }
+    }
+}
