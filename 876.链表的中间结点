@@ -1,0 +1,71 @@
+题目描述：给定一个头结点为head的非空单链表，返回链表的中间结点。如果有两个中间结点，则返回第二个中间结点。
+
+解法一：快慢指针，用两个指针slow和fast一起遍历链表，slow一次走一步，fast一次走两步。那么当fast到达链表的末尾时，slow必然位于中间
+
+复杂度分析：时间复杂度O(N),空间复杂度O(1)
+
+代码：
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode slow = head, fast = head;
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+            
+        }       
+        return slow;
+    }
+}
+
+解法二：数组，链表的缺点在于不能通过下标访问对应的元素。因此我们可以考虑对链表进行遍历，同时将遍历到的元素依次放入数组A中。如果我们遍历到了N个元素，那么链表以及数组长度也为N，对应的中间结点即A[N/2]
+
+复杂度分析：时间复杂度O(N),空间复杂度O(N)
+
+代码：
+
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode[] A = new ListNode[100];
+        int t = 0;
+        while (head != null) {
+            A[t++] = head;
+            head = head.next;
+        }
+        return A[t / 2];
+    }
+}
+
+解法三：单指针法，我们可以对链表进行两次遍历。第一次遍历时，我们统计链表中的元素个数 N；第二次遍历时，我们遍历到第 N/2 个元素（链表的首节点为第 0 个元素）时，将该元素返回即可。
+
+复杂度分析：时间复杂度O(N)，空间复杂度O(1)
+
+代码：
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        int n = 0;
+        ListNode cur = head;
+        while (cur != null) {
+            ++n;
+            cur = cur.next;
+        }
+        int k = 0;
+        cur = head;
+        while (k < n / 2) {
+            ++k;
+            cur = cur.next;
+        }
+        return cur;
+    }
+}
+
+顺序：解法二->解法三->解法一
