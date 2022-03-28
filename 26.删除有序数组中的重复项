@@ -1,0 +1,22 @@
+题目描述：给你一个升序排列的数组nums，请你原地删除重复出现的元素，使每个元素只出现一次，返回删除后数组的新长度。元素的相对顺序应该保持一致。如果在删除重复项之后有k个元素，那么nums的前k个元素应该保持最终信息
+
+难度：简单
+
+解法一：双指针
+
+复杂度分析：时间复杂度O(N)，空间复杂度O(1)
+
+代码：
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int i, j;
+        for(i = 0, j = 1; j < nums.length; ++j){
+            if(nums[i] != nums[j]){
+                nums[i+1] = nums[j];
+                i++;
+            }
+        }
+        return i+1;
+    }
+}
+
