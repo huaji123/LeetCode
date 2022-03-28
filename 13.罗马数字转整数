@@ -1,0 +1,77 @@
+题目描述：罗马数字包含以下七种字符，I(1),V(5),X(10),L(50),C(100),D(500),M(1000)，大数放在小数前面，表示减去；小数放在大数前面，表示加上。
+
+难度：简单
+
+解法一：模拟
+
+思路：通常情况下，罗马数字中小的数字在大的数字的右边。若输入的字符串满足该情况，那么可以将每个字符视作一个单独的值，累加每个字符对应的数值即可。
+
+例如 XXVII 可视作 X+X+V+I+I=10+10+5+1+1=27。
+
+若存在小的数字在大的数字的左边的情况，根据规则需要减去小的数字。对于这种情况，我们也可以将每个字符视作一个单独的值，若一个数字右侧的数字比它大，则将该数字的符号取反。
+
+例如 XIV 可视作 X−I+V=10−1+5=14。
+
+复杂度分析：时间复杂度O(N),空间复杂度O(1)
+
+代码：
+class Solution {
+    Map<Character, Integer> symbolValues = new HashMap<Character, Integer>() {{
+        put('I', 1);
+        put('V', 5);
+        put('X', 10);
+        put('L', 50);
+        put('C', 100);
+        put('D', 500);
+        put('M', 1000);
+    }};
+
+    public int romanToInt(String s) {
+        int ans = 0;
+        int n = s.length();
+        for (int i = 0; i < n; ++i) {
+            int value = symbolValues.get(s.charAt(i));
+            if (i < n - 1 && value < symbolValues.get(s.charAt(i + 1))) {
+                ans -= value;
+            } else {
+                ans += value;
+            }
+        }
+        return ans;
+    }
+}
+
+
+class Solution {
+    public int romanToInt(String s) {
+        char[] c = s.toCharArray();
+
+        int[] nums = new int[c.length];
+
+        int count;
+
+        for(int i = 0; i < c.length; ++i){
+            switch(c[i]){
+                case 'I': nums[i] = 1;break;
+                case 'V': nums[i] = 5;break;
+                case 'X': nums[i] = 10;break;
+                case 'L': nums[i] = 50;break;
+                case 'C': nums[i] = 100;break;
+                case 'D': nums[i] = 500;break;
+                case 'M': nums[i] = 1000;break;
+            }
+        }
+
+        count = 0;
+
+        for(int i = 0; i < nums.length; ++i){
+            if(i < nums.length-1 && nums[i] < nums[i+1])
+                count -= nums[i];
+            else
+                count += nums[i];
+        }
+
+        return count;
+    }
+}
+
