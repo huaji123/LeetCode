@@ -1,0 +1,63 @@
+题目描述：给定一个正整数，检查它的二进制表示是否总是0/1交替出现；换句话说，就是二进制表示中相邻两位的数字永不相同
+
+难度：简单
+
+解法一：转换为二进制字符串
+
+复杂度分析：时间复杂度O(N),空间复杂度O(N)
+
+代码：
+class Solution {
+    public boolean hasAlternatingBits(int n) {
+        String str = "";
+        while(n!=0){
+            str = n%2+str;
+            n = n/2;
+        }
+        char[] c = str.toCharArray();
+        for(int i = 0; i < c.length-1; ++i){
+            if(c[i] == c[i+1])
+                return false;
+        }
+
+        return true;
+    }
+}
+
+解法二：模拟
+
+思路：从最低位到最高位，我们用对2取模再除以2的方法，依次求出输入的二进制表示的每一位，并与前一位进行比较。如果相同，则不符合条件；如果每次比较都不相同，则符合条件。
+
+复杂度分析：时间复杂度O(logN)，空间复杂度O(1)
+
+代码：
+class Solution {
+    public boolean hasAlternatingBits(int n) {
+        int prev = 2;
+        while (n != 0) {
+            int cur = n % 2;
+            if (cur == prev) {
+                return false;
+            }
+            prev = cur;
+            n /= 2;
+        }
+        return true;
+    }
+}
+
+解法二：位运算
+
+思路：对输入 n 的二进制表示右移一位后，得到的数字再与 n 按位异或得到 a。当且仅当输入 n 为交替位二进制数时，a 的二进制表示全为 1（不包括前导 0）。这里进行简单证明：当 a 的某一位为 1 时，当且仅当 n 的对应位和其前一位相异。当 a 的每一位为 1 时，当且仅当 n 的所有相邻位相异，即 n 为交替位二进制数。
+
+将 a 与 a+1 按位与，当且仅当 a 的二进制表示全为 1 时，结果为 0。这里进行简单证明：当且仅当 a 的二进制表示全为 1 时，a+1 可以进位，并将原最高位置为 0，按位与的结果为 0。否则，不会产生进位，两个最高位都为 1，相与结果不为 0。
+
+复杂度分析：时间复杂度O(1)，空间复杂度O(1)
+
+代码：
+class Solution {
+    public boolean hasAlternatingBits(int n) {
+        int a = n ^ (n >> 1);
+        return (a & (a + 1)) == 0;
+    }
+}
