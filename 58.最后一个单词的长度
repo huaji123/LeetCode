@@ -1,0 +1,40 @@
+题目描述：给你一个字符串s，由若干单词组成，单词前后用一些空格字符。返回字符串中最后一个单词的长度。单词是指仅由字母组成，不包含任何空格字符的最大字符串。
+
+难度：简单
+
+解法一：将字符串以空格为间隔分隔开，再将最后一个字符串转换成字符数组，最后返回字符数组的长度
+
+复杂度分析：时间复杂度O(1)，空间复杂度O(N)
+
+代码：
+class Solution {
+    public int lengthOfLastWord(String s) {
+            String[] str = s.split(" ");
+            char[] c = str[str.length -1].toCharArray();
+            return c.length;
+    }
+}
+
+解法二：反向遍历。
+
+思路：题目要求得到字符串中最后一个单词的长度，可以反向遍历字符串，寻找最后一个单词并计算其长度。
+由于字符串中至少存在一个单词，因此字符串中一定有字母。首先找到字符串中的最后一个字母，该字母即为最后一个单词的最后一个字母。
+从最后一个字母开始继续反向遍历字符串，直到遇到空格或者到达字符串的起始位置。遍历到的每个字母都是最后一个单词中的字母，因此遍历到的字母数量即为最后一个单词的长度。
+
+复杂度分析：时间复杂度O(N)，空间复杂度O(1)
+
+代码：
+class Solution {
+    public int lengthOfLastWord(String s) {
+        int index = s.length() - 1;
+        while (s.charAt(index) == ' ') {
+            index--;
+        }
+        int wordLength = 0;
+        while (index >= 0 && s.charAt(index) != ' ') {
+            wordLength++;
+            index--;
+        }
+        return wordLength;
+    }
+}
