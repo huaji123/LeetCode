@@ -1,0 +1,36 @@
+题目描述：机器人的有效动作有R（右），L（左），U（上）和 D（下）。如果机器人在完成所有动作后返回原点，则返回 true。否则，返回 false。
+
+难度：简单
+
+解法一：模拟
+
+思路：我们只需按指令模拟机器人移动的坐标即可。起始时机器人的坐标为 (0,0)(0,0)，在遍历完所有指令并对机器人进行移动之后，判断机器人的坐标是否为 (0,0)(0,0) 即可。
+具体来说，我们用两个变量 xx 和 yy 来表示机器人当前所在的坐标为 (x,y)(x,y)，起始时 x=0x=0，y=0y=0。接下来我们遍历指令并更新机器人的坐标：
+
+如果指令是 UU，则令 y=y-1y=y−1
+如果指令是 DD，则令 y=y+1y=y+1
+如果指令是 LL，则令 x=x-1x=x−1
+如果指令是 RR，则令 x=x+1x=x+1
+
+复杂度分析：时间复杂度O(N)，空间复杂度O(1)
+
+代码：
+class Solution {
+    public boolean judgeCircle(String moves) {
+        int x = 0, y = 0;
+        int length = moves.length();
+        for (int i = 0; i < length; i++) {
+            char move = moves.charAt(i);
+            if (move == 'U') {
+                y--;
+            } else if (move == 'D') {
+                y++;
+            } else if (move == 'L') {
+                x--;
+            } else if (move == 'R') {
+                x++;
+            }
+        }
+        return x == 0 && y == 0;
+    }
+}
