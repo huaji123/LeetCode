@@ -1,0 +1,31 @@
+题目描述：给定一个二叉树的根节点root，返回它的中序遍历
+
+难度：简单
+
+解法一：用栈进行迭代
+
+复杂度分析：时间复杂度O(N)，空间复杂度O(N)
+
+代码：
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        Deque<TreeNode> stk = new LinkedList<TreeNode>();
+        while (root != null || !stk.isEmpty()) {
+            while (root != null) {
+                stk.push(root);
+                root = root.left;
+            }
+            root = stk.pop();
+            res.add(root.val);
+            root = root.right;
+        }
+        return res;
+    }
+}
+
+解法二：递归
+
+复杂度分析：时间复杂度O(N)，空间复杂度O(1)
+
+代码：
