@@ -1,0 +1,47 @@
+题目描述：给定一个无序数组，给出当数组有序时，有几个位置和原先不匹配
+
+难度：简单
+
+解法一：复制新数组，将新数组排序，和原数组对比
+
+复杂度分析：时间复杂度O(NlogN)，空间复杂度O(N)
+
+代码：
+class Solution {
+    public int heightChecker(int[] heights) {
+        int n = 0;
+        int[] expected = new int[heights.length];
+
+        for (int i = 0; i < heights.length; i++) {
+            expected[i] = heights[i];
+        }
+        Arrays.sort(expected);
+        for(int i = 0; i < heights.length; ++i){
+            if(expected[i] == heights[i])
+                continue;
+            n++;
+        }
+        return n;
+    }
+}
+
+解法二：计数，将数组出现的数字次数用一个数组记录下来，然后和原数组进行对比
+
+复杂度分析：时间复杂度O(N)，空间复杂度O(1)
+
+代码：
+class Solution {
+    public int heightChecker(int[] heights) {
+        int[] arr = new int[101];
+        for (int height : heights) {
+            arr[height]++;
+        }
+        int count = 0;
+        for (int i = 1, j = 0; i < arr.length; i++) {
+            while (arr[i]-- > 0) {
+                if (heights[j++] != i) count++;
+            }
+        }
+        return count;
+    }
+}
