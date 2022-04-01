@@ -1,0 +1,80 @@
+题目描述：给定一棵二叉树的根节点root，返回其结点值的后序遍历
+
+题目难度：简单
+
+解法一：双栈
+
+思路：
+1.申请一个栈，记为s1，然后将头节点head压入s1中
+2.从s1中弹出的节点记为cur，然后依次将cur的左孩子和右孩子压入s1中
+3.在整个过程中，每一个从s1中弹出的节点都放进s2
+4.不断重复步骤2和步骤3，直到s1为空，过程停止
+5.从s2中依次弹出节点并打印，打印的顺序就是后序遍历的顺序
+
+复杂度分析：时间复杂度O(N)，空间复杂度O(N)
+
+代码：
+
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        Stack<TreeNode> s1 = new Stack<TreeNode>();
+        Stack<TreeNode> s2 = new Stack<TreeNode>();
+        TreeNode res;
+        List<Integer> ans = new ArrayList<Integer>();
+        if(root == null)
+            return ans;
+        s1.push(root);
+        while(!s1.isEmpty()){
+            res = s1.pop();
+            s2.push(res);
+            if(res.left != null)
+                s1.push(res.left);
+            if(res.right != null)
+                s1.push(res.right);
+        }
+        while(!s2.isEmpty()){
+            res = s2.pop();
+            ans.add(res.val);
+        }
+        return ans;
+    }
+}
+
+解法二：单栈+两个变量
+
+思路：
+1、申请一个栈stack，将头节点head压入stack，同时设置两个变量h和c。在整个流程中，h代表最近一次弹出并打印的节点，c代表stack的栈顶节点，初始时h为头节点，c为null
+2、每次令c等于当前stack的栈顶节点，但是不从stack中弹出，此时分为以下三种情况：
+①如果c的左孩子不为null，并且h不等于c的左孩子，也不等于c的右孩子，则把c的左孩子压入stack中。
+②如果条件①不成立，并且c的右孩子不为null，h不等于c的右孩子，则把c的右孩子压入栈stack中。
+③如果条件①和②都不成立，说明c的左子树和右子树都已经打印完毕，那么从stack中弹出c并打印，然后令h=c。
+3、一直重复步骤2，直到stack为空，过程停止。
+
+复杂度分析：时间复杂度O(N)，空间复杂度O(N)
+
+代码：
+
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        
+        TreeNode h = root,c = null;
+        List<Integer> ans = new ArrayList<Integer>();
+        if(root == null)
+            return ans;
+        stack.push(root);
+        while(!stack.isEmpty()){
+            c = stack.peek();
+
+            if(c.left != null && h != c.left && h != c.right)
+                stack.push(c.left);
+            else if(c.right != null && h != c.right)
+                stack.push(c.right);
+            else{
+                h = stack.pop();
+                ans.add(h.val);
+            }
+        }
+        return ans;
+    }
+}
